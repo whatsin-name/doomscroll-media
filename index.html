@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doomscroll Media — Virtual Presence Agency</title>
+<meta name="description" content="Doomscroll Media builds and runs the virtual presence of brands and individuals — social media management, content creation, personal branding, and paid social.">
+<style>
+  :root{
+    --bg:#07070a;
+    --bg-alt:#0e0e14;
+    --card:#12121a;
+    --border:#22222e;
+    --text:#eaeaf0;
+    --muted:#9494a6;
+    --accent:#7c5cff;
+    --accent2:#ff5c8a;
+    --green:#3ddc97;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+  img{max-width:100%;}
+
+  /* eyebrow / notification chip */
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(124,92,255,0.1);
+    border:1px solid rgba(124,92,255,0.35);
+    color:var(--accent);
+    font-size:12px; font-weight:600; letter-spacing:.02em;
+    padding:6px 12px 6px 8px;
+    border-radius:999px;
+    margin-bottom:18px;
+  }
+  .eyebrow .dot{
+    width:7px; height:7px; border-radius:50%; background:var(--accent2);
+    box-shadow:0 0 0 0 rgba(255,92,138,.6);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(255,92,138,.55);}
+    70%{box-shadow:0 0 0 6px rgba(255,92,138,0);}
+    100%{box-shadow:0 0 0 0 rgba(255,92,138,0);}
+  }
+
+  /* nav */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(7,7,10,0.75);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    max-width:1120px; margin:0 auto; padding:16px 24px;
+  }
+  .logo{font-weight:800; font-size:18px; letter-spacing:-.02em;}
+  .logo span{color:var(--accent);}
+  nav .links{display:flex; gap:28px; font-size:14px; color:var(--muted);}
+  nav .links a:hover{color:var(--text);}
+  .nav-cta{
+    background:var(--accent); color:#fff; padding:9px 18px; border-radius:8px;
+    font-size:14px; font-weight:600;
+  }
+  @media (max-width:760px){ nav .links{display:none;} }
+
+  section{padding:100px 0;}
+  h1,h2,h3{font-weight:800; letter-spacing:-.02em;}
+  h2{font-size:34px; margin-bottom:14px;}
+  .section-sub{color:var(--muted); font-size:16px; max-width:560px; margin-bottom:48px;}
+  .center{text-align:center; margin-left:auto; margin-right:auto;}
+
+  /* HERO */
+  .hero{
+    padding:170px 0 110px;
+    position:relative;
+    background:
+      radial-gradient(600px 400px at 85% 10%, rgba(124,92,255,0.18), transparent 60%),
+      radial-gradient(500px 350px at 10% 90%, rgba(255,92,138,0.10), transparent 60%);
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.1fr .9fr; gap:60px; align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr;} }
+  .hero h1{font-size:54px; line-height:1.08; margin-bottom:22px;}
+  .hero h1 .grad{
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p.lead{color:var(--muted); font-size:18px; max-width:480px; margin-bottom:32px;}
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    display:inline-block; padding:14px 26px; border-radius:9px; font-weight:600; font-size:15px;
+    cursor:pointer; border:1px solid transparent; transition:transform .15s ease, opacity .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--accent); color:#fff;}
+  .btn-ghost{border:1px solid var(--border); color:var(--text); background:transparent;}
+
+  /* lock screen phone */
+  .phone{
+    width:290px; min-height:560px; margin:0 auto;
+    background:linear-gradient(180deg,#111119,#0a0a10);
+    border:1px solid #2a2a38; border-radius:38px;
+    padding:26px 18px; position:relative; overflow:hidden;
+    box-shadow:0 40px 80px -20px rgba(124,92,255,0.25), inset 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .phone::before{
+    content:''; position:absolute; top:14px; left:50%; transform:translateX(-50%);
+    width:90px; height:22px; background:#000; border-radius:14px;
+  }
+  .phone-time{text-align:center; margin-top:46px; font-size:44px; font-weight:700; letter-spacing:-1px;}
+  .phone-date{text-align:center; color:var(--muted); font-size:13px; margin-bottom:22px;}
+  .notif-stack{display:flex; flex-direction:column; gap:10px;}
+  .notif{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:14px; padding:11px 12px;
+    display:flex; gap:10px; align-items:flex-start;
+    opacity:0; transform:translateY(-16px) scale(.96);
+    animation:notifIn .5s ease forwards;
+  }
+  .notif .ic{
+    width:26px; height:26px; border-radius:7px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:13px;
+  }
+  .notif .body{flex:1; min-width:0;}
+  .notif .app{font-size:11px; color:var(--muted); display:flex; justify-content:space-between;}
+  .notif .msg{font-size:12.5px; color:var(--text); margin-top:2px;}
+  .notif .msg b{font-weight:600;}
+  @keyframes notifIn{ to{ opacity:1; transform:translateY(0) scale(1); } }
+  .n1{background:linear-gradient(135deg,#833ab4,#fd1d1d);}
+  .n2{background:#1d9bf0;}
+  .n3{background:#25d366;}
+  .n4{background:#ff0050;}
+  .n5{background:#0a66c2;}
+  .notif:nth-child(1){animation-delay:.15s;}
+  .notif:nth-child(2){animation-delay:.55s;}
+  .notif:nth-child(3){animation-delay:.95s;}
+  .notif:nth-child(4){animation-delay:1.35s;}
+  .notif:nth-child(5){animation-delay:1.75s;}
+  .phone-swipe{
+    position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+    color:var(--muted); font-size:11px; letter-spacing:.04em;
+  }
+
+  /* platforms strip */
+  .platforms{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--bg-alt); padding:34px 0;}
+  .platforms .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:24px;}
+  .platforms .item{color:var(--muted); font-weight:600; font-size:15px; letter-spacing:.02em; display:flex; align-items:center; gap:8px;}
+  .platforms .item b{color:var(--text); font-weight:700;}
+
+  /* brands vs individuals */
+  .split-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  @media (max-width:800px){ .split-grid{grid-template-columns:1fr;} }
+  .split-card{
+    background:var(--card); border:1px solid var(--border); border-radius:18px; padding:36px;
+    position:relative; overflow:hidden;
+  }
+  .split-card.brands{border-top:2px solid var(--accent);}
+  .split-card.individuals{border-top:2px solid var(--accent2);}
+  .split-card h3{font-size:22px; margin-bottom:6px;}
+  .split-card .tag{font-size:13px; color:var(--muted); margin-bottom:20px;}
+  .split-card ul{list-style:none; display:flex; flex-direction:column; gap:12px;}
+  .split-card li{font-size:14.5px; color:var(--text); padding-left:22px; position:relative; color:#cfcfe0;}
+  .split-card li::before{content:'✓'; position:absolute; left:0; color:var(--green); font-weight:700;}
+
+  /* services */
+  .services-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media (max-width:860px){ .services-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .services-grid{grid-template-columns:1fr;} }
+  .service-card{
+    background:var(--card); border:1px solid var(--border); border-radius:16px; padding:26px;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .service-card:hover{border-color:var(--accent); transform:translateY(-3px);}
+  .service-card .ic{font-size:24px; margin-bottom:14px;}
+  .service-card h3{font-size:17px; margin-bottom:8px;}
+  .service-card p{font-size:14px; color:var(--muted);}
+
+  /* process */
+  .process-list{display:flex; flex-direction:column; gap:0;}
+  .process-item{
+    display:grid; grid-template-columns:70px 1fr; gap:20px; padding:26px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .process-item:last-child{border-bottom:none;}
+  .process-num{font-size:32px; font-weight:800; color:var(--accent); opacity:.55;}
+  .process-item h3{font-size:18px; margin-bottom:6px;}
+  .process-item p{color:var(--muted); font-size:14.5px; max-width:560px;}
+
+  /* why us */
+  .why-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  @media (max-width:860px){ .why-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .why-grid{grid-template-columns:1fr;} }
+  .why-card{padding:22px 4px;}
+  .why-card .num{font-size:28px; font-weight:800; background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .why-card h3{font-size:16px; margin:8px 0 6px;}
+  .why-card p{color:var(--muted); font-size:14px;}
+
+  /* faq */
+  .faq-item{border-bottom:1px solid var(--border);}
+  .faq-q{
+    width:100%; text-align:left; background:none; border:none; color:var(--text);
+    font-size:16px; font-weight:600; padding:20px 0; cursor:pointer;
+    display:flex; justify-content:space-between; align-items:center; gap:16px; font-family:inherit;
+  }
+  .faq-q .plus{color:var(--accent); font-size:20px; transition:transform .2s ease; flex-shrink:0;}
+  .faq-item.open .faq-q .plus{transform:rotate(45deg);}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+  .faq-a p{color:var(--muted); font-size:14.5px; padding-bottom:20px; max-width:640px;}
+
+  /* contact */
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:50px;}
+  @media (max-width:860px){ .contact-grid{grid-template-columns:1fr;} }
+  .contact-info .eyebrow{margin-bottom:18px;}
+  .contact-info h2{margin-bottom:16px;}
+  .contact-info p{color:var(--muted); margin-bottom:26px; max-width:420px;}
+  .contact-info .direct{font-size:14px; color:var(--text);}
+  .contact-info .direct a{color:var(--accent); font-weight:600;}
+  form{display:flex; flex-direction:column; gap:14px;}
+  .field label{display:block; font-size:13px; color:var(--muted); margin-bottom:6px;}
+  .field input, .field textarea, .field select{
+    width:100%; background:var(--card); border:1px solid var(--border); color:var(--text);
+    padding:12px 14px; border-radius:9px; font-size:14.5px; font-family:inherit;
+  }
+  .field textarea{resize:vertical; min-height:110px;}
+  .field input:focus, .field textarea:focus, .field select:focus{outline:none; border-color:var(--accent);}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:480px){ .row2{grid-template-columns:1fr;} }
+  #formMsg{font-size:13.5px; margin-top:4px; min-height:18px;}
+  #formMsg.ok{color:var(--green);}
+  #formMsg.err{color:var(--accent2);}
+
+  footer{border-top:1px solid var(--border); padding:34px 0; color:var(--muted); font-size:13px;}
+  footer .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">doomscroll<span>.</span>media</div>
+    <div class="links">
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a href="#contact" class="nav-cta">Get in touch</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> 3 new mentions of your brand today</div>
+      <h1>Your presence, <span class="grad">while you sleep.</span></h1>
+      <p class="lead">Doomscroll Media is a virtual presence agency — we run the social feeds, content, and paid campaigns for brands and individuals who'd rather not be glued to their phone doing it themselves.</p>
+      <div class="cta-row">
+        <a href="#contact" class="btn btn-primary">Start a project</a>
+        <a href="#services" class="btn btn-ghost">See what we do</a>
+      </div>
+    </div>
+    <div>
+      <div class="phone">
+        <div class="phone-time" id="clock">9:41</div>
+        <div class="phone-date" id="clockDate">Saturday, August 8</div>
+        <div class="notif-stack">
+          <div class="notif"><div class="ic n1">IG</div><div class="body"><div class="app"><span>Instagram</span><span>now</span></div><div class="msg"><b>+248</b> new followers this week</div></div></div>
+          <div class="notif"><div class="ic n2">X</div><div class="body"><div class="app"><span>X</span><span>2m</span></div><div class="msg">Your post is <b>trending</b> in Marketing</div></div></div>
+          <div class="notif"><div class="ic n3">WA</div><div class="body"><div class="app"><span>Leads</span><span>5m</span></div><div class="msg">New inbound: <b>"Can we talk pricing?"</b></div></div></div>
+          <div class="notif"><div class="ic n4">TT</div><div class="body"><div class="app"><span>TikTok</span><span>12m</span></div><div class="msg">Reel hit <b>102K</b> views overnight</div></div></div>
+          <div class="notif"><div class="ic n5">IN</div><div class="body"><div class="app"><span>LinkedIn</span><span>1h</span></div><div class="msg">Personal brand post: <b>4.3K</b> impressions</div></div></div>
+        </div>
+        <div class="phone-swipe">swipe up to open ↑</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section class="platforms">
+  <div class="wrap">
+    <div class="item"><b>Instagram</b></div>
+    <div class="item"><b>LinkedIn</b></div>
+    <div class="item"><b>X</b> / Twitter</div>
+    <div class="item"><b>TikTok</b></div>
+    <div class="item"><b>YouTube</b></div>
+    <div class="item"><b>Facebook</b></div>
+    <div class="item"><b>Meta Ads</b></div>
+  </div>
+</section>
+
+<!-- BRANDS VS INDIVIDUALS -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> Who we work with</div>
+    <h2>Built for brands. Built for individuals.</h2>
+    <p class="section-sub">Same doomscroll-proof playbook, tuned for two very different goals.</p>
+    <div class="split-grid">
+      <div class="split-card brands">
+        <h3>For Brands</h3>
+        <div class="tag">Demand, awareness, and community at scale</div>
+        <ul>
+          <li>Always-on social media management</li>
+          <li>Content calendars tied to launches &amp; campaigns</li>
+          <li>Community management &amp; DM/comment response</li>
+          <li>Paid social planning, targeting &amp; optimization</li>
+          <li>Monthly performance reporting</li>
+        </ul>
+      </div>
+      <div class="split-card individuals">
+        <h3>For Individuals</h3>
+        <div class="tag">A personal brand that compounds</div>
+        <ul>
+          <li>Personal branding strategy &amp; positioning</li>
+          <li>Ghostwriting &amp; content production</li>
+          <li>Consistent posting without the burnout</li>
+          <li>Thought-leadership growth on LinkedIn/X</li>
+          <li>Optional paid boosting for key posts</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> What we do</div>
+    <h2>Services</h2>
+    <p class="section-sub">Everything needed to show up online, minus the scrolling.</p>
+    <div class="services-grid">
+      <div class="service-card"><div class="ic">📱</div><h3>Social Media Management</h3><p>Calendars, scheduling, publishing, and day-to-day account handling across every platform that matters to you.</p></div>
+      <div class="service-card"><div class="ic">🎬</div><h3>Content Creation</h3><p>Reels, carousels, short-form video, and graphics produced on a consistent cadence — on-brand, every time.</p></div>
+      <div class="service-card"><div class="ic">👤</div><h3>Personal Branding</h3><p>Positioning, voice, and a content system that builds a recognizable name instead of random posts.</p></div>
+      <div class="service-card"><div class="ic">🎯</div><h3>Paid Social</h3><p>Campaign setup, audience targeting, creative testing, and budget optimization on Meta &amp; beyond.</p></div>
+      <div class="service-card"><div class="ic">💬</div><h3>Community &amp; DMs</h3><p>Comment moderation and inbox management so no lead or mention slips through.</p></div>
+      <div class="service-card"><div class="ic">📊</div><h3>Reporting &amp; Strategy</h3><p>Clear monthly reporting and quarterly strategy resets based on what's actually working.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> How it works</div>
+    <h2>Process</h2>
+    <p class="section-sub">From first call to a feed that runs itself.</p>
+    <div class="process-list">
+      <div class="process-item"><div class="process-num">01</div><div><h3>Discovery call</h3><p>We learn your brand, audience, and goals — 20 minutes, no deck required.</p></div></div>
+      <div class="process-item"><div class="process-num">02</div><div><h3>Strategy &amp; content plan</h3><p>Platform mix, content pillars, and a posting calendar built around what actually moves the needle for you.</p></div></div>
+      <div class="process-item"><div class="process-num">03</div><div><h3>Production</h3><p>We write, shoot, edit, and design — you approve on a simple review cycle.</p></div></div>
+      <div class="process-item"><div class="process-num">04</div><div><h3>Publish &amp; manage</h3><p>Scheduled posting, community management, and paid amplification where it makes sense.</p></div></div>
+      <div class="process-item"><div class="process-num">05</div><div><h3>Report &amp; iterate</h3><p>Monthly numbers, honest read on what worked, and a plan adjusted for next month.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> Why doomscroll media</div>
+    <h2>Why us</h2>
+    <div class="why-grid">
+      <div class="why-card"><div class="num">01</div><h3>Small, senior team</h3><p>No juniors learning on your account — direct access to the people doing the work.</p></div>
+      <div class="why-card"><div class="num">02</div><h3>Platform-native content</h3><p>Made for the feed it's going on, not repurposed leftovers.</p></div>
+      <div class="why-card"><div class="num">03</div><h3>Speed</h3><p>Trend-aware turnarounds — relevance beats perfection on social.</p></div>
+      <div class="why-card"><div class="num">04</div><h3>No lock-in</h3><p>Month-to-month engagements. We keep you by results, not contracts.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> Questions</div>
+    <h2>FAQ</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">Do you work with individuals or only brands? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Both. We run dedicated packages for company brand accounts and separate packages for personal brand/creator accounts.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Which platforms do you cover? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Instagram, LinkedIn, X, TikTok, YouTube, and Facebook, plus paid campaigns on Meta Ads. We recommend a focused mix rather than spreading thin across all of them.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Do you shoot original content or just repost? <span class="plus">+</span></button>
+        <div class="faq-a"><p>We produce original content — writing, design, and video editing — built for each platform. We're not a repost/aggregation service.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How long is the minimum commitment? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Month-to-month. We ask for a 30-day notice period to wind down cleanly, but no long-term lock-in contracts.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How do we get started? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Fill out the contact form below with a bit about your brand or yourself — we'll reply to set up a discovery call.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-info">
+      <div class="eyebrow"><span class="dot"></span> Let's talk</div>
+      <h2>Ready to stop doomscrolling your own feed?</h2>
+      <p>Tell us a bit about your brand or yourself and what you're trying to grow. We reply within one business day.</p>
+      <div class="direct">Prefer email? Write to <a href="mailto:hello@doomscrollmedia.in">hello@doomscrollmedia.in</a></div>
+    </div>
+    <div>
+      <form id="contactForm">
+        <input type="hidden" name="access_key" value="45a86362-ea43-4b4b-b4a9-60105b83545d">
+        <input type="hidden" name="subject" value="New lead from doomscrollmedia.in">
+        <input type="hidden" name="from_name" value="Doomscroll Media site">
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+        <div class="row2">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="type">You're a...</label>
+            <select id="type" name="type">
+              <option value="Brand">Brand</option>
+              <option value="Individual">Individual</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="handle">Instagram/LinkedIn handle (optional)</label>
+            <input type="text" id="handle" name="handle">
+          </div>
+        </div>
+        <div class="field">
+          <label for="message">What do you need help with?</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Send message</button>
+        <div id="formMsg"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© <span id="year"></span> Doomscroll Media. All rights reserved.</div>
+    <div>hello@doomscrollmedia.in</div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // live lock-screen clock
+  function updateClock(){
+    const now = new Date();
+    let h = now.getHours();
+    const m = now.getMinutes().toString().padStart(2,'0');
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12; if(h === 0) h = 12;
+    document.getElementById('clock').textContent = h + ':' + m;
+    const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('clockDate').textContent = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  // restart notification-stack animation on a loop
+  const stack = document.querySelector('.notif-stack');
+  function replayNotifs(){
+    const notifs = stack.querySelectorAll('.notif');
+    notifs.forEach(n => { n.style.animation = 'none'; });
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        notifs.forEach(n => { n.style.animation = ''; });
+      });
+    });
+  }
+  setInterval(replayNotifs, 7000);
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    q.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(other => {
+        if(other !== item){
+          other.classList.remove('open');
+          other.querySelector('.faq-a').style.maxHeight = null;
+        }
+      });
+      if(isOpen){
+        item.classList.remove('open');
+        a.style.maxHeight = null;
+      } else {
+        item.classList.add('open');
+        a.style.maxHeight = a.scrollHeight + 'px';
+      }
+    });
+  });
+
+  // contact form submit
+  const form = document.getElementById('contactForm');
+  const formMsg = document.getElementById('formMsg');
+  const submitBtn = document.getElementById('submitBtn');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    formMsg.className = '';
+    formMsg.textContent = '';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+    const formData = new FormData(form);
+    const payload = JSON.stringify(Object.fromEntries(formData));
+    try{
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: payload
+      });
+      const result = await res.json().catch(() => ({}));
+      if(res.status === 200 && result.success){
+        formMsg.className = 'ok';
+        formMsg.textContent = "Thanks — we'll be in touch within a business day.";
+        form.reset();
+      } else {
+        formMsg.className = 'err';
+        formMsg.textContent = result.message || 'Something went wrong. Please email hello@doomscrollmedia.in directly.';
+      }
+    } catch(err){
+      formMsg.className = 'err';
+      formMsg.textContent = 'Network error. Please email hello@doomscrollmedia.in directly.';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send message';
+    }
+  });
+</script>
+
+</body>
+</html>
